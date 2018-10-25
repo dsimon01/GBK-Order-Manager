@@ -11,6 +11,8 @@ import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
+// test commit -
+
 public class LoginActivity extends AppCompatActivity {
 
     public void onLoginClicked(View view){
