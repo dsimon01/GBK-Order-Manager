@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -28,7 +29,7 @@ public class HomeActivity extends AppCompatActivity {
 
     // Parse query to edit value of status to accepted
     // change the value of the button to Mark as ready - for now done inside the on item click listener
-    public void onAccept(View view){
+    public void onAccept(final View view){
         Log.i("TO ACCEPT", orderSelected);
         ParseQuery<ParseObject> updateOrderStatus = ParseQuery.getQuery("Order");
         updateOrderStatus.whereEqualTo("OrderID", Integer.parseInt(orderSelected));
@@ -41,6 +42,11 @@ public class HomeActivity extends AppCompatActivity {
                         Log.i("STATUS RETRIEVED", object.getString("Status"));
                         object.put("Status", "accepted");
                         object.saveInBackground();
+                        Button accept = findViewById(R.id.accept);
+                        accept.setVisibility(view.GONE);
+                        Toast.makeText(HomeActivity.this, "Order Accepted", Toast.LENGTH_LONG).show();
+                        Button markAsCompleted = findViewById(R.id.markAsReady);
+                        markAsCompleted.setVisibility(view.VISIBLE);
                     }
                 }else {
                     Log.i("ERRRRRRRRR", "ERROR");
@@ -56,7 +62,7 @@ public class HomeActivity extends AppCompatActivity {
 
     // Parse query to edit value of status to ready
     // change the visibility of the button to invisible - for now done inside the on item click listener
-    public void onMarkAsReady(View view){
+    public void onMarkAsReady(final View view){
         Log.i("TO COMPLETE", orderSelected);
         ParseQuery<ParseObject> updateOrderStatus = ParseQuery.getQuery("Order");
         updateOrderStatus.whereEqualTo("OrderID", Integer.parseInt(orderSelected));
@@ -69,6 +75,9 @@ public class HomeActivity extends AppCompatActivity {
                         Log.i("STATUS RETRIEVED", object.getString("Status"));
                         object.put("Status", "completed");
                         object.saveInBackground();
+                        Button markAsCompleted = findViewById(R.id.markAsReady);
+                        markAsCompleted.setVisibility(view.GONE);
+                        Toast.makeText(HomeActivity.this, "Order Marked as completed", Toast.LENGTH_LONG).show();
                     }
                 }else {
                     Log.i("ERRRRRRRRR", "ERROR");
