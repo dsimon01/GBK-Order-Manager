@@ -17,11 +17,10 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivityOLD extends AppCompatActivity {
 
     String orderSelected;
 
@@ -44,7 +43,7 @@ public class HomeActivity extends AppCompatActivity {
                         object.saveInBackground();
                         Button accept = findViewById(R.id.accept);
                         accept.setVisibility(view.GONE);
-                        Toast.makeText(HomeActivity.this, "Order Accepted", Toast.LENGTH_LONG).show();
+                        Toast.makeText(HomeActivityOLD.this, "Order Accepted", Toast.LENGTH_LONG).show();
                         Button markAsCompleted = findViewById(R.id.markAsReady);
                         markAsCompleted.setVisibility(view.VISIBLE);
                     }
@@ -77,20 +76,15 @@ public class HomeActivity extends AppCompatActivity {
                         object.saveInBackground();
                         Button markAsCompleted = findViewById(R.id.markAsReady);
                         markAsCompleted.setVisibility(view.GONE);
-                        Toast.makeText(HomeActivity.this, "Order Marked as completed", Toast.LENGTH_LONG).show();
+                        Toast.makeText(HomeActivityOLD.this, "Order Marked as completed", Toast.LENGTH_LONG).show();
                     }
                 }else {
                     Log.i("ERRRRRRRRR", "ERROR");
                     e.printStackTrace();
                 }
-
             }
         });
     }
-
-
-
-
 
 
     @Override
