@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <ImageView
+        android:layout_width="400dp"
+        android:layout_height="match_parent"
+        android:src="@color/colorPrimary"/>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/recyclerHome" />
+
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="155dp"
+        android:layout_height="170dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="228dp"
+        android:layout_marginLeft="228dp"
+        android:layout_marginTop="192dp"
+        android:layout_marginEnd="241dp"
+        android:layout_marginRight="241dp"
+        android:layout_toEndOf="@+id/recyclerHome"
+        android:layout_toRightOf="@+id/recyclerHome"
+        app:srcCompat="@drawable/image_home" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageView"
+        android:layout_marginStart="267dp"
+        android:layout_marginLeft="267dp"
+        android:layout_marginTop="51dp"
+        android:layout_toEndOf="@+id/recyclerHome"
+        android:layout_toRightOf="@+id/recyclerHome"
+        android:text="No Active Orders" />
+
+
+</RelativeLayout>

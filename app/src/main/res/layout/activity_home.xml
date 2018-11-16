@@ -8,11 +8,11 @@
 
     <TextView
         android:id="@+id/itemTextView4"
-        android:layout_width="54dp"
-        android:layout_height="18dp"
-        android:layout_marginTop="288dp"
-        android:layout_marginEnd="408dp"
-        android:layout_marginRight="408dp"
+        android:layout_width="399dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="296dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
         android:text="ITEM"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"

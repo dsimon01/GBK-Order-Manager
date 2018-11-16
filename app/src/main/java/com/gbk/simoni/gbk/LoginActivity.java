@@ -32,7 +32,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     if (e == null){
 
-                        Intent intent = new Intent(getApplicationContext(),HomeActivity.class);
+                        Intent intent = new Intent(getApplicationContext(),OrderManager.class);
                         startActivity(intent);
                     }
 
