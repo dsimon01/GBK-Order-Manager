@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".LoginActivity" />
-        <activity android:name=".HomeActivity" />
+        <activity android:name=".HomeActivityOLD" />
         <activity android:name=".OrderManager"></activity>
     </application>
 
