@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         if (ParseUser.getCurrentUser() != null){
-            Intent alreadyLoggedIn = new Intent(getApplicationContext(), HomeActivity.class);
+            Intent alreadyLoggedIn = new Intent(getApplicationContext(), OrderManager.class);
             startActivity(alreadyLoggedIn);
         }
 
