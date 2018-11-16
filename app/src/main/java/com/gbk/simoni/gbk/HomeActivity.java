@@ -204,10 +204,12 @@ public class HomeActivity extends AppCompatActivity {
 
 
 
-// what happens if the "orders" object is null? how can i make this not crash here? - How can I make this to look for orders every certain period and if null just retry
-// Here I have to take the contents of the list and make them visible in the activity rather than adding them on the list.
-// On the list just have to add the order number > when the user taps on the list item, display all other info on the side screen as per design
+// How can I make this to look for orders every certain period and if null just retry
+// BUG - place order with the same order number is messing things up.
+// ec2-35-178-79-238.eu-west-2.compute.amazonaws.com > Server link
+
+
 //https://stackoverflow.com/questions/32138061/how-to-run-a-parse-query-in-background-or-schedule-it-in-android
 //https://www.programcreek.com/java-api-examples/?class=com.parse.ParseQuery&method=findInBackground
-// ec2-35-178-79-238.eu-west-2.compute.amazonaws.com > Server link
+
 
