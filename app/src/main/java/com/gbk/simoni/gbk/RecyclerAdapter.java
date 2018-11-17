@@ -31,7 +31,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<ViewHolder> {
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int i) {
 
         final Order MockOrder = order.get(i);
-        viewHolder.orderNumber.setText(MockOrder.tableNumber);
+        viewHolder.orderNumber.setText(Integer.toString(MockOrder.orderID));
         viewHolder.orderInfo.setText(MockOrder.items);
 
         //System.out.println(menuItem);   = >  com.gbk.simoni.gbk.Items@ee5429c
@@ -42,7 +42,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<ViewHolder> {
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("ItemClicked", "Item: " + i);
+                System.out.println("Clicked on item: " + i);
+
+
+
                 //Intent intent = new Intent(v.getContext(), ItemSelectionActivity.class);
                 //v.getContext().startActivity(intent);
             }
