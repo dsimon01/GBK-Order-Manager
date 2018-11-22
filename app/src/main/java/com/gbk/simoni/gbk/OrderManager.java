@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.parse.FindCallback;
 import com.parse.ParseAnalytics;
@@ -16,7 +18,7 @@ import com.parse.ParseQuery;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderManager extends AppCompatActivity {
+public class OrderManager extends AppCompatActivity implements RecyclerAdapter.OnOrderClickListener {
 
     RecyclerView recyclerView;
     ArrayList<Order> OrderSample = new ArrayList<>();
@@ -34,8 +36,6 @@ public class OrderManager extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
         recyclerView = findViewById(R.id.recyclerHome);
-
-
         // ================================================================
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Order");
@@ -84,10 +84,20 @@ public class OrderManager extends AppCompatActivity {
 
     public void applyRecyclerView() {
 
+        RecyclerAdapter adapter = new RecyclerAdapter(OrderSample);
+        adapter.setListener(this);
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(new RecyclerAdapter(OrderSample));
+        recyclerView.setAdapter(adapter);
+
+    }
+
+    @Override
+    public void onOrderClicked(Order order) {
+
+        // now you got an order here from the recycler adapter
 
     }
 }

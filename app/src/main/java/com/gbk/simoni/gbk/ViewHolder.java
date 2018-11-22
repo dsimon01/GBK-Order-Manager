@@ -7,6 +7,8 @@ import android.widget.TextView;
 
 public class ViewHolder extends RecyclerView.ViewHolder {
 
+// click view in here:
+
 
     TextView orderNumber;
     TextView orderInfo;
@@ -16,6 +18,5 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 
         orderNumber = itemView.findViewById(R.id.orderNumberTextView);
         orderInfo = itemView.findViewById(R.id.itemInfoTextView);
-
     }
 }
