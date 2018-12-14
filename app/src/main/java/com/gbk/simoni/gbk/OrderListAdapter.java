@@ -15,17 +15,9 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.View
 
     ArrayList<Order> order;
 
-    ItemClicked activity;
-
-    public interface ItemClicked{
-
-        void onItemClicked(int which);
-    }
-
     public OrderListAdapter (Context context, ArrayList<Order> list){
 
         order = list;
-        activity = (ItemClicked) context;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
@@ -42,7 +34,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.View
                 @Override
                 public void onClick(View v) {
 
-                    activity.onItemClicked(order.indexOf(v.getTag()));
+                    Log.i("click", "on :");
 
                 }
             });

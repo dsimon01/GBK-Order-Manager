@@ -6,7 +6,7 @@ import android.os.Bundle;
 import com.parse.ParseAnalytics;
 import com.parse.ParseUser;
 
-public class MainActivity extends AppCompatActivity implements OrderListAdapter.ItemClicked{
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,11 +24,6 @@ public class MainActivity extends AppCompatActivity implements OrderListAdapter.
 
 
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
-
-    }
-
-    @Override
-    public void onItemClicked(int which) {
 
     }
 }
