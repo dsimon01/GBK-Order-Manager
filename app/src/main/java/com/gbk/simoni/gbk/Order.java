@@ -49,8 +49,8 @@ public class Order {
         this.orderID = orderID;
     }
 
-    public double getPrice() {
-        return price;
+    public String getPrice() {
+        return Double.toString(price);
     }
 
     public void setPrice(double price) {

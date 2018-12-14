@@ -35,6 +35,12 @@ public class ParseServerConfig extends Application {
         public void onCreate() {
             super.onCreate();
 
+            try {
+                TimeUnit.SECONDS.sleep(3);   // During this time i need to show some cool image with animation
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
             // Enable Local Datastore.
             Parse.enableLocalDatastore(this);
 
@@ -69,8 +75,6 @@ public class ParseServerConfig extends Application {
                                         object.getDouble("Price")
                                 ));
                             }
-
-                            System.out.println("Parse Server order list has " + orders.size() + " items");
                         }
                     } else {
                         Log.i("ERRRRRRRRR", "ERROR");
