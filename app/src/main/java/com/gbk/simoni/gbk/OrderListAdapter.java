@@ -15,9 +15,17 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.View
 
     ArrayList<Order> order;
 
+    ItemClicked activity;
+
+    public interface ItemClicked{
+
+        void onItemClicked(int which);
+    }
+
     public OrderListAdapter (Context context, ArrayList<Order> list){
 
         order = list;
+        activity = (ItemClicked) context;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
@@ -27,16 +35,15 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.View
 
         public ViewHolder(@NonNull final View itemView) {
             super(itemView);
+
             order_number = itemView.findViewById(R.id.order_number);
             item_count = itemView.findViewById(R.id.item_count);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    Log.i("Clicked on item", "RECYCLER");
-                    Log.i("Clicked on item", "RECYCLER");
-                    Log.i("Clicked on item", "RECYCLER");
-                    Log.i("Clicked on item", "RECYCLER");
+                    activity.onItemClicked(order.indexOf(v.getTag()));
+
                 }
             });
         }

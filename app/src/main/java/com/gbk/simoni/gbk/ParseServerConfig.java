@@ -25,16 +25,15 @@ import com.parse.ParseQuery;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class ParseServerConfig extends Application {
 
-        public static ArrayList<Order> orders;
+    public static ArrayList<Order> orders;
 
         @Override
         public void onCreate() {
             super.onCreate();
-
-            orders = new ArrayList<>();
 
             // Enable Local Datastore.
             Parse.enableLocalDatastore(this);
@@ -52,6 +51,7 @@ public class ParseServerConfig extends Application {
             defaultACL.setPublicWriteAccess(true);
             ParseACL.setDefaultACL(defaultACL, true);
 
+            orders = new ArrayList<>();
 
             ParseQuery<ParseObject> query = ParseQuery.getQuery("Order");
             query.findInBackground(new FindCallback<ParseObject>() {
@@ -69,6 +69,8 @@ public class ParseServerConfig extends Application {
                                         object.getDouble("Price")
                                 ));
                             }
+
+                            System.out.println("Parse Server order list has " + orders.size() + " items");
                         }
                     } else {
                         Log.i("ERRRRRRRRR", "ERROR");

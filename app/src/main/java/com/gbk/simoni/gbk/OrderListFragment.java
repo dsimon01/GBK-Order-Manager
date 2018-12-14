@@ -14,14 +14,14 @@ import android.view.ViewGroup;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class OrderList extends Fragment {
+public class OrderListFragment extends Fragment {
 
     RecyclerView recyclerView;
     RecyclerView.Adapter adapter;
     RecyclerView.LayoutManager layoutManager;
     View view;
 
-    public OrderList() {
+    public OrderListFragment() {
         // Required empty public constructor
     }
 
@@ -41,7 +41,6 @@ public class OrderList extends Fragment {
         recyclerView.setHasFixedSize(true);
 
         layoutManager = new LinearLayoutManager(this.getActivity());
-
         recyclerView.setLayoutManager(layoutManager);
         adapter = new OrderListAdapter(this.getActivity(), ParseServerConfig.orders);
         recyclerView.setAdapter(adapter);
