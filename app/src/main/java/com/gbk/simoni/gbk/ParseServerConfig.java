@@ -19,11 +19,11 @@ import com.parse.SaveCallback;
             // Enable Local Datastore.
             Parse.enableLocalDatastore(this);
 
-            // Config with Parse-Bitnami
+            // Config keys with Parse-Bitnami.
             Parse.initialize(new Parse.Configuration.Builder(getApplicationContext())
-                    .applicationId("0f8520e454f6ad2e9d7b288af8fb6ab2e2e15f65")
-                    .clientKey("ebe48418c0faaea3bee4ede298d571d663ddcde0")
-                    .server("http://35.178.79.238:80/parse/")
+                    .applicationId("a150e5d0e42666ddf6864edf392bed450d9bb305")
+                    .clientKey("ec3b36f8e6eea59e2a7d52b4358efaf7594aaca8")
+                    .server("http://3.8.131.250:80/parse/")
                     .build()
             );
 
