@@ -9,12 +9,32 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import android.os.CountDownTimer;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import com.parse.FindCallback;
+import com.parse.ParseAnalytics;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ArrayList;
 
-    public class ParseServerConfig extends Application {
+public class ParseServerConfig extends Application {
+
+        public static ArrayList<Order> orders;
 
         @Override
         public void onCreate() {
             super.onCreate();
+
+            orders = new ArrayList<>();
 
             // Enable Local Datastore.
             Parse.enableLocalDatastore(this);
@@ -27,31 +47,34 @@ import com.parse.SaveCallback;
                     .build()
             );
 
-            /*
-            ParseObject object = new ParseObject("ExampleObject");
-            object.put("myNumber", "123");
-            object.put("myString", "gourmet burger user");
-
-            object.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(ParseException ex) {
-                    if (ex == null) {
-                        Log.i("Parse Result", "Successful!");
-                    } else {
-                        Log.i("Parse Result", "Failed" + ex.toString());
-                    }
-                }
-            });
-
-
-            ParseUser.enableAutomaticUser();
-
-            */
-
             ParseACL defaultACL = new ParseACL();
             defaultACL.setPublicReadAccess(true);
             defaultACL.setPublicWriteAccess(true);
             ParseACL.setDefaultACL(defaultACL, true);
 
+
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Order");
+            query.findInBackground(new FindCallback<ParseObject>() {
+
+                @Override
+                public void done(List<ParseObject> objects, ParseException e) {
+                    if (e == null) {
+                        if (objects.size() > 0) {
+                            for (ParseObject object : objects) {
+                                orders.add(new Order(
+                                        object.getString("TableNumber"),
+                                        object.getString("Status"),
+                                        object.get("Item").toString(),
+                                        object.getInt("OrderID"),
+                                        object.getDouble("Price")
+                                ));
+                            }
+                        }
+                    } else {
+                        Log.i("ERRRRRRRRR", "ERROR");
+                        e.printStackTrace();
+                    }
+                }
+            });
         }
-    }
+}
