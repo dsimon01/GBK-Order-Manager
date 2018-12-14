@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
             Intent alreadyLoggedIn = new Intent(getApplicationContext(), OrderManager.class);
             startActivity(alreadyLoggedIn);
         }
-        */m
+        */
 
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
 
