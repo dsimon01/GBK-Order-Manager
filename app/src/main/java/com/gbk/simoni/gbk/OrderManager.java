@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 public class OrderManager extends AppCompatActivity implements OrderListAdapter.ItemClicked {
 
-    TextView orderNumber, tableNumber, itemInfo, orderStatus, orderTotalPrice;
+    TextView orderNumber, tableNumber, itemInfo, orderStatus;
 
 
     @Override
@@ -18,6 +18,8 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
         orderNumber = findViewById(R.id.order_number_information_fragment);
         tableNumber = findViewById(R.id.table_number_information_fragment);
         itemInfo = findViewById(R.id.item_information);
+        orderStatus = findViewById(R.id.order_status);
+
 
         if (ParseServerConfig.orders.size() > 0) {
             onItemClicked(0);
@@ -27,16 +29,10 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
     @Override
     public void onItemClicked(int which) {
 
-        orderNumber.setText(ParseServerConfig.orders.get(which).getOrderID());
+        orderNumber.setText("#" + ParseServerConfig.orders.get(which).getOrderID());
         tableNumber.setText(ParseServerConfig.orders.get(which).getTableNumber().toUpperCase());
         itemInfo.setText(ParseServerConfig.orders.get(which).getItems().toUpperCase());
-       // orderStatus.setText(ParseServerConfig.orders.get(which).getStatus());
+        orderStatus.setText(ParseServerConfig.orders.get(which).getStatus().toUpperCase());
+
     }
 }
-
-/*
-
-
-        this.price = price;
-    }
- */
