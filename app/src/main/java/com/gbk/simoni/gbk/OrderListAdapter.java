@@ -32,13 +32,13 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.View
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         TextView order_number;
-        TextView item_count;
+        TextView order_status;
 
         public ViewHolder(@NonNull final View itemView) {
             super(itemView);
 
             order_number = itemView.findViewById(R.id.order_number);
-            item_count = itemView.findViewById(R.id.item_count);
+            order_status = itemView.findViewById(R.id.order_status);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -63,7 +63,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.View
 
         viewHolder.itemView.setTag(order.get(i));
         viewHolder.order_number.setText("#" + order.get(i).getOrderID());
-        //viewHolder.item_count.setText(order.get(i).getItems().length());
+        viewHolder.order_status.setText(order.get(i).getStatus().toUpperCase());
 
     }
 

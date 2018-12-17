@@ -21,9 +21,9 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
         orderStatus = findViewById(R.id.order_status);
 
 
-        if (ParseServerConfig.orders.size() > 0) {
+        //if (ParseServerConfig.orders.size() > 0) {
             onItemClicked(0);
-        }
+      //  }
     }
 
     @Override
@@ -32,7 +32,5 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
         orderNumber.setText("#" + ParseServerConfig.orders.get(which).getOrderID());
         tableNumber.setText(ParseServerConfig.orders.get(which).getTableNumber().toUpperCase());
         itemInfo.setText(ParseServerConfig.orders.get(which).getItems().toUpperCase());
-        orderStatus.setText(ParseServerConfig.orders.get(which).getStatus().toUpperCase());
-
     }
 }
