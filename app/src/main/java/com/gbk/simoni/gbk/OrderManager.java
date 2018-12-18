@@ -5,10 +5,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class OrderManager extends AppCompatActivity implements OrderListAdapter.ItemClicked {
 
-    TextView orderNumber, tableNumber, itemInfo, orderStatus;
-
+    TextView orderNumber, tableNumber,orderStatus;
+    ArrayList<String> orderItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,13 +20,12 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
 
         orderNumber = findViewById(R.id.order_number_information_fragment);
         tableNumber = findViewById(R.id.table_number_information_fragment);
-        itemInfo = findViewById(R.id.item_information);
         orderStatus = findViewById(R.id.order_status);
 
 
-        //if (ParseServerConfig.orders.size() > 0) {
+        if (ParseServerConfig.orders.size() > 0) {
             onItemClicked(0);
-      //  }
+        }
     }
 
     @Override
@@ -31,6 +33,17 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
 
         orderNumber.setText("#" + ParseServerConfig.orders.get(which).getOrderID());
         tableNumber.setText(ParseServerConfig.orders.get(which).getTableNumber().toUpperCase());
-        itemInfo.setText(ParseServerConfig.orders.get(which).getItems().toUpperCase());
+
+        String items = ParseServerConfig.orders.get(which).getItems();
+        orderItems = converter(items);
+        System.out.println(" --> " + orderItems);
+    }
+
+    public ArrayList<String> converter(String string){
+
+        String convert = string;
+        convert = convert.substring(1, convert.length() - 1);
+        ArrayList<String> order_items = new ArrayList(Arrays.asList(convert.split(",")));
+        return order_items;
     }
 }

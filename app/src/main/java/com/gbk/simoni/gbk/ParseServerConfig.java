@@ -36,7 +36,7 @@ public class ParseServerConfig extends Application {
             super.onCreate();
 
             try {
-                TimeUnit.SECONDS.sleep(3);   // During this time i need to show some cool image with animation
+                TimeUnit.SECONDS.sleep(5);   // During this time i need to show some cool image with animation
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
