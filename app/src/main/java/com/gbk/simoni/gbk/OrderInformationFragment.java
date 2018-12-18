@@ -16,10 +16,8 @@ import android.view.ViewGroup;
  */
 public class OrderInformationFragment extends Fragment {
 
-    RecyclerView recyclerView;
-    RecyclerView.Adapter adapter;
-    RecyclerView.LayoutManager layoutManager;
-    View view;
+
+    public static View view;
 
     public OrderInformationFragment() {
         // Required empty public constructor
@@ -31,18 +29,5 @@ public class OrderInformationFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.order_information_fragment, container, false);
         return view;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        recyclerView = view.findViewById(R.id.recycler_view_order_info);
-        recyclerView.setHasFixedSize(true);
-
-        layoutManager = new LinearLayoutManager(this.getActivity());
-        recyclerView.setLayoutManager(layoutManager);
-        adapter = new ItemListAdapter(this.getActivity(), OrderManager.orderItems);
-        recyclerView.setAdapter(adapter);
     }
 }

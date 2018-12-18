@@ -3,6 +3,9 @@ package com.gbk.simoni.gbk;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -13,18 +16,21 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
     TextView orderNumber, tableNumber,orderStatus;
     public static ArrayList<String> orderItems;
 
+    RecyclerView recyclerView;
+    RecyclerView.Adapter adapter;
+    RecyclerView.LayoutManager layoutManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
-
         orderNumber = findViewById(R.id.order_number_information_fragment);
         tableNumber = findViewById(R.id.table_number_information_fragment);
         orderStatus = findViewById(R.id.order_status);
 
           if (ParseServerConfig.orders.size() > 0) {
-            onItemClicked(4);
+            onItemClicked(0);
         }
   }
 
@@ -33,17 +39,28 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
 
         orderNumber.setText("#" + ParseServerConfig.orders.get(which).getOrderID());
         tableNumber.setText(ParseServerConfig.orders.get(which).getTableNumber().toUpperCase());
-
         String items = ParseServerConfig.orders.get(which).getItems();
         orderItems = converter(items);
+        updateRecycler(orderItems);
         System.out.println(" --> " + orderItems);
     }
 
     public ArrayList<String> converter(String string){
-
         String convert = string;
         convert = convert.substring(1, convert.length() - 1);
         ArrayList<String> order_items = new ArrayList(Arrays.asList(convert.split(",")));
         return order_items;
     }
+
+    public void updateRecycler(ArrayList<String> items){
+
+        recyclerView = OrderInformationFragment.view.findViewById(R.id.recycler_view_order_info);
+        recyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        adapter = new ItemListAdapter(this, items);
+        recyclerView.setAdapter(adapter);
+
+    }
+
 }
