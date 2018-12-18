@@ -29,7 +29,7 @@
 
         <fragment
             android:id="@+id/fragment2"
-            android:name="com.gbk.simoni.gbk.OrderInformation"
+            android:name="com.gbk.simoni.gbk.OrderInformationFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:layout="@layout/order_information_fragment" />

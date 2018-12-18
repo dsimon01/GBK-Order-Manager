@@ -11,7 +11,8 @@ import java.util.Arrays;
 public class OrderManager extends AppCompatActivity implements OrderListAdapter.ItemClicked {
 
     TextView orderNumber, tableNumber,orderStatus;
-    ArrayList<String> orderItems;
+    public static ArrayList<String> orderItems;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,11 +23,10 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
         tableNumber = findViewById(R.id.table_number_information_fragment);
         orderStatus = findViewById(R.id.order_status);
 
-
-        if (ParseServerConfig.orders.size() > 0) {
-            onItemClicked(0);
+          if (ParseServerConfig.orders.size() > 0) {
+            onItemClicked(4);
         }
-    }
+  }
 
     @Override
     public void onItemClicked(int which) {
