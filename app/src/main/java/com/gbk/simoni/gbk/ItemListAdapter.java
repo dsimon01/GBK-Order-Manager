@@ -43,7 +43,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ItemListAdapter.ViewHolder viewHolder, int i) {
 
-        viewHolder.item_name.setText(items.get(i));
+        viewHolder.item_name.setText(items.get(i).toUpperCase());
     }
 
     @Override

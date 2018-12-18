@@ -17,7 +17,9 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:text="x3 Burger and Fries"
+            android:textAllCaps="true"
             android:textColor="@color/colorPrimaryLight"
-            android:textSize="24sp"/>
+            android:textSize="18sp"
+            app:fontFamily="sans-serif-smallcaps" />
     </LinearLayout>
 </LinearLayout>

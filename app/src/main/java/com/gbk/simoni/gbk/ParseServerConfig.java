@@ -35,11 +35,11 @@ public class ParseServerConfig extends Application {
         public void onCreate() {
             super.onCreate();
 
-            try {
-                TimeUnit.SECONDS.sleep(5);   // During this time i need to show some cool image with animation
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+//            try {
+  //              TimeUnit.SECONDS.sleep(5);   // During this time i need to show some cool image with animation
+    //        } catch (InterruptedException e) {
+      //          e.printStackTrace();
+        //    }
 
             // Enable Local Datastore.
             Parse.enableLocalDatastore(this);

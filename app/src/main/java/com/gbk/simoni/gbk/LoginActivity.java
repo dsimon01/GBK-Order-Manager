@@ -11,7 +11,6 @@ import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
-// test commit -
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -34,8 +33,9 @@ public class LoginActivity extends AppCompatActivity {
 
                         Intent intent = new Intent(getApplicationContext(),OrderManager.class);
                         startActivity(intent);
+                    }else {
+                        Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
-
                 }
             });
 
