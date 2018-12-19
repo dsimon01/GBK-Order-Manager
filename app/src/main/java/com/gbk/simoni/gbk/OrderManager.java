@@ -114,6 +114,8 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
                         object.put("Status", "accepted");
                         object.saveInBackground();
                         get_class_order();
+                        acknowledged.setVisibility(View.INVISIBLE);
+                        markedReady.setVisibility(View.VISIBLE);
                     }
                 } else {
                     Log.i("ERROR", "ERROR");
