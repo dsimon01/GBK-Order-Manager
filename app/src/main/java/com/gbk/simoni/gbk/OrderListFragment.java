@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -39,10 +41,22 @@ public class OrderListFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.recycler_view_list);
         recyclerView.setHasFixedSize(true);
-
         layoutManager = new LinearLayoutManager(this.getActivity());
         recyclerView.setLayoutManager(layoutManager);
         adapter = new OrderListAdapter(this.getActivity(), ParseServerConfig.orders);
+        System.out.println(ParseServerConfig.orders.size() + " <-- ON ACTIVITY CREATED" );
         recyclerView.setAdapter(adapter);
+    }
+
+    public void notifyDataChange(){
+
+        recyclerView = view.findViewById(R.id.recycler_view_list);
+        recyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this.getActivity());
+        recyclerView.setLayoutManager(layoutManager);
+        adapter = new OrderListAdapter(this.getActivity(), ParseServerConfig.orders);
+        System.out.println(ParseServerConfig.orders.size() + " <-- NOTIFY DATA CHANGE" );
+        recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 }

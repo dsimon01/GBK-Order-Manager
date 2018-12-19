@@ -1,6 +1,7 @@
 package com.gbk.simoni.gbk;
 
 
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,6 +23,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 public class OrderManager extends AppCompatActivity implements OrderListAdapter.ItemClicked {
 
@@ -32,6 +34,8 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
     RecyclerView recyclerView;
     RecyclerView.Adapter adapter;
     RecyclerView.LayoutManager layoutManager;
+    OrderListFragment orderListFragment;
+    FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +47,9 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
         orderItemsTextView = findViewById(R.id.orderItems);
         acknowledged = findViewById(R.id.acknowledgeOrderButton);
         markedReady = findViewById(R.id.markOrderReadyButton);
+
+        fragmentManager = this.getSupportFragmentManager();
+        orderListFragment = (OrderListFragment) fragmentManager.findFragmentById(R.id.fragment);
 
         if (ParseServerConfig.orders.size() > 0) {
             onItemClicked(0);
@@ -93,6 +100,10 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
     public void onAcknowledgedOrder(View view) {
 
         Toast.makeText(OrderManager.this, "ACK'ED THE ORDER", Toast.LENGTH_LONG).show();
+
+        ParseServerConfig.orders.clear();
+        System.out.println(ParseServerConfig.orders.size() + " <-- CLEAR");
+
         ParseQuery<ParseObject> updateOrderStatus = ParseQuery.getQuery("Order");
         updateOrderStatus.whereEqualTo("OrderID",  Integer.parseInt(orderSelected));
         updateOrderStatus.findInBackground(new FindCallback<ParseObject>() {
@@ -102,6 +113,7 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
                     for (ParseObject object : objects) {
                         object.put("Status", "accepted");
                         object.saveInBackground();
+                        get_class_order();
                     }
                 } else {
                     Log.i("ERROR", "ERROR");
@@ -134,4 +146,31 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
         });
     }
 
+    public void get_class_order(){
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Order");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if (e == null) {
+                    if (objects.size() > 0) {
+                        for (ParseObject object : objects) {
+                            ParseServerConfig.orders.add(new Order(
+                                    object.getString("TableNumber"),
+                                    object.getString("Status"),
+                                    object.get("Item").toString(),
+                                    object.getInt("OrderID"),
+                                    object.getDouble("Price")
+                            ));
+                        }
+
+                        System.out.println(ParseServerConfig.orders.size() + " <-- GET_CLASS_ " );
+                        orderListFragment.notifyDataChange();
+                    }
+                } else {
+                    Log.i("ERRRRRRRRR", "ERROR");
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 }
