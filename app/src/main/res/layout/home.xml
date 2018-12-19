@@ -1,83 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
-    <ImageView
-        android:layout_width="400dp"
+    <fragment
+        android:id="@+id/fragment"
+        android:name="com.gbk.simoni.gbk.OrderListFragment"
+        android:layout_width="384dp"
         android:layout_height="match_parent"
-        android:src="@color/colorPrimary"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout="@layout/order_list_fragment" />
 
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/fragment"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="400dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/recyclerHome" />
-
-    <TextView
-        android:id="@+id/orderNumberHomeTextView"
-        android:layout_width="91dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="34dp"
-        android:layout_marginEnd="500dp"
-        android:layout_marginRight="500dp"
-        android:text="@string/_1234"
-        android:textSize="28sp" />
-
-    <View
-        android:layout_width="491dp"
-        android:layout_height="1dp"
-        android:layout_alignParentTop="true"
-
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="148dp"
-        android:layout_marginEnd="54dp"
-        android:layout_marginRight="54dp"
-        android:background="@android:color/darker_gray" />
-
-    <TextView
-        android:id="@+id/tableNumberHomeTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="92dp"
-        android:layout_marginEnd="457dp"
-        android:layout_marginRight="457dp"
-        android:background="@color/colorPrimary"
-        android:padding="5dp"
-        android:text="@string/table_number_18"
-        android:textColor="@color/colorAccent"
-        android:textSize="14sp" />
-
-    <TextView
-        android:id="@+id/prepareForTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="43dp"
-        android:layout_marginEnd="132dp"
-        android:layout_marginRight="132dp"
-        android:text="prepare_for" />
-
-
-    <ListView
-        android:id="@+id/itemsDisplayListView"
-        android:layout_width="475dp"
-        android:layout_height="388dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="178dp"
-        android:layout_marginEnd="-143dp"
-        android:layout_toStartOf="@+id/prepareForTextView" />
-
-
-</RelativeLayout>
+        <fragment
+            android:id="@+id/fragment2"
+            android:name="com.gbk.simoni.gbk.OrderInformationFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout="@layout/order_information_fragment" />
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

@@ -3,4 +3,10 @@
     <string name="prepare_for">PREPARE FOR</string>
     <string name="table_number_18">TABLE NUMBER 18</string>
     <string name="_1234">#1234</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="order_number">Order Number</string>
+    <string name="count_of_items">Count of items</string>
+    <string name="table_number">Table number 18</string>
 </resources>
