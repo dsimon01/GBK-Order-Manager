@@ -16,15 +16,11 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ViewHo
     ArrayList<String> items;
 
     public ItemListAdapter (Context context, ArrayList<String> list){
-
         items = list;
-
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-
         TextView item_name;
-
         public ViewHolder(@NonNull final View itemView) {
             super(itemView);
             item_name = itemView.findViewById(R.id.item_name);
@@ -34,7 +30,6 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ViewHo
     @NonNull
     @Override
     public ItemListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.order_items, viewGroup, false);
         return new ItemListAdapter.ViewHolder(view);
     }
@@ -42,7 +37,6 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ViewHo
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ItemListAdapter.ViewHolder viewHolder, int i) {
-
         viewHolder.item_name.setText(items.get(i).toUpperCase());
     }
 

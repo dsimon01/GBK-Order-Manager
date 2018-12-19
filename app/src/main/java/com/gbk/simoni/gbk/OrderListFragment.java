@@ -10,8 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,28 +33,21 @@ public class OrderListFragment extends Fragment {
         return view;
     }
 
+    // RUN EVERY 30s --------------------------------------------------------------------
+    // or from parseServer class call the updateOrderList Every 30s from there
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        recyclerView = view.findViewById(R.id.recycler_view_list);
-        recyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(this.getActivity());
-        recyclerView.setLayoutManager(layoutManager);
-        adapter = new OrderListAdapter(this.getActivity(), ParseServerConfig.orders);
-        System.out.println(ParseServerConfig.orders.size() + " <-- ON ACTIVITY CREATED" );
-        recyclerView.setAdapter(adapter);
+        updateOrderList();
     }
 
-    public void notifyDataChange(){
-
+    public void updateOrderList(){
         recyclerView = view.findViewById(R.id.recycler_view_list);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this.getActivity());
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new OrderListAdapter(this.getActivity(), ParseServerConfig.orders);
-        System.out.println(ParseServerConfig.orders.size() + " <-- NOTIFY DATA CHANGE" );
+        adapter = new OrderListAdapter(this.getActivity(), ParseServer.orders);
         recyclerView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        //adapter.notifyDataSetChanged();
     }
 }

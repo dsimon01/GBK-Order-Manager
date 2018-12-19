@@ -19,28 +19,25 @@ public class LoginActivity extends AppCompatActivity {
         EditText username = findViewById(R.id.usernameEditText);
         EditText password = findViewById(R.id.passwordEditText);
 
-        if (username.getText().toString().matches("") || password.getText().toString().matches("")){
-
-            Toast.makeText(this, "Username/Password required.", Toast.LENGTH_SHORT).show();
-
+        if (username.getText().toString().matches("") || password.getText().toString()
+                .matches("")){
+            Toast.makeText(this, "Username/Password required.",
+                    Toast.LENGTH_SHORT).show();
         }else {
-
-            ParseUser.logInInBackground(username.getText().toString(), password.getText().toString(), new LogInCallback() {
+            ParseUser.logInInBackground(username.getText().toString(), password.getText()
+                    .toString(), new LogInCallback() {
                 @Override
                 public void done(ParseUser user, ParseException e) {
-
                     if (e == null){
-
                         Intent intent = new Intent(getApplicationContext(),OrderManager.class);
                         startActivity(intent);
                     }else {
-                        Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, e.getMessage(),
+                                Toast.LENGTH_SHORT).show();
                     }
                 }
             });
-
         }
-
     }
 
     @Override
