@@ -29,8 +29,10 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
 
     public static ArrayList<String> orderItems;
     TextView orderNumber, tableNumber, no_active_orders, orderItemsTextView;
+
     Button acknowledged, markedReady;
-    String orderSelected, orderStatus;
+
+    String orderSelected,orderStatus;
     RecyclerView recyclerView;
     RecyclerView.Adapter adapter;
     RecyclerView.LayoutManager layoutManager;
@@ -45,6 +47,7 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
         tableNumber = findViewById(R.id.table_number_information_fragment);
         no_active_orders = findViewById(R.id.no_active_orders);
         orderItemsTextView = findViewById(R.id.orderItems);
+
         acknowledged = findViewById(R.id.acknowledgeOrderButton);
         markedReady = findViewById(R.id.markOrderReadyButton);
 
@@ -65,15 +68,23 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
 
         orderStatus = ParseServerConfig.orders.get(which).getStatus();
 
-        if (orderStatus.equals("new") || orderStatus.equals("NEW")) {
+        if (orderStatus.equals("new")){
             acknowledged.setVisibility(View.VISIBLE);
             markedReady.setVisibility(View.INVISIBLE);
-        }else {
+        }
+
+        if (orderStatus.equals("accepted")){
             acknowledged.setVisibility(View.INVISIBLE);
             markedReady.setVisibility(View.VISIBLE);
         }
 
+        if (orderStatus.equals("ready")){
+            acknowledged.setVisibility(View.INVISIBLE);
+            markedReady.setVisibility(View.INVISIBLE);
+        }
+
         orderSelected = ParseServerConfig.orders.get(which).getOrderID();
+        System.out.println(orderStatus + "<-- ORDER STATUS : ORDER NO " + orderSelected);
         orderNumber.setText("#" + orderSelected);
         tableNumber.setText(ParseServerConfig.orders.get(which).getTableNumber().toUpperCase());
         String items = ParseServerConfig.orders.get(which).getItems();
@@ -114,9 +125,11 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
                         object.put("Status", "accepted");
                         object.saveInBackground();
                         get_class_order();
-                        acknowledged.setVisibility(View.INVISIBLE);
-                        markedReady.setVisibility(View.VISIBLE);
                     }
+
+                    acknowledged.setVisibility(View.INVISIBLE);
+                    markedReady.setVisibility(View.VISIBLE);
+
                 } else {
                     Log.i("ERROR", "ERROR");
                     e.printStackTrace();
@@ -128,6 +141,9 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
 
     public void onMarkedOrderReady(View view){
 
+        ParseServerConfig.orders.clear();
+        System.out.println(ParseServerConfig.orders.size() + " <-- CLEAR");
+
         ParseQuery<ParseObject> updateOrderStatus = ParseQuery.getQuery("Order");
         updateOrderStatus.whereEqualTo("OrderID", Integer.parseInt(orderSelected));
         updateOrderStatus.findInBackground(new FindCallback<ParseObject>() {
@@ -137,8 +153,11 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
                     for (ParseObject object : objects){
                         object.put("Status", "ready");
                         object.saveInBackground();
+                        get_class_order();
 
                         Toast.makeText(OrderManager.this, "Order Marked as ready", Toast.LENGTH_LONG).show();
+                        acknowledged.setVisibility(View.INVISIBLE);
+                        markedReady.setVisibility(View.INVISIBLE);
                     }
                 }else {
                     Log.i("ERROR", "ERROR");
