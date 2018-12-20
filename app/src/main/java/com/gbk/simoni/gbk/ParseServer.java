@@ -21,9 +21,6 @@ public class ParseServer extends Application {
         super.onCreate();
         ParseServerConfig();
         getRequest_OrderObject();
-
-        Timer timer = new Timer();
-        timer.schedule(new Ping(), 0, 10000);
     }
 
     public void ParseServerConfig() {

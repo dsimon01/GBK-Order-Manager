@@ -18,6 +18,7 @@ import com.parse.ParseQuery;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Timer;
 
 
 public class OrderManager extends AppCompatActivity implements OrderListAdapter.ItemClicked {
@@ -49,6 +50,9 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
         orderListFragment = (OrderListFragment) fragmentManager.findFragmentById(R.id.fragment);
 
         orderDetails();
+
+        Timer timer = new Timer();
+        timer.schedule(new Ping(), 0, 10000);
     }
 
     @Override
