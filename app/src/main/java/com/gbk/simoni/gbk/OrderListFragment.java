@@ -33,8 +33,6 @@ public class OrderListFragment extends Fragment {
         return view;
     }
 
-    // RUN EVERY 30s --------------------------------------------------------------------
-    // or from parseServer class call the updateOrderList Every 30s from there
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -48,6 +46,6 @@ public class OrderListFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         adapter = new OrderListAdapter(this.getActivity(), ParseServer.orders);
         recyclerView.setAdapter(adapter);
-        //adapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
     }
 }

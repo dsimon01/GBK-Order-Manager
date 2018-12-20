@@ -11,16 +11,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Timer;
+
 
 public class OrderManager extends AppCompatActivity implements OrderListAdapter.ItemClicked {
 
@@ -50,17 +48,7 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
         fragmentManager = this.getSupportFragmentManager();
         orderListFragment = (OrderListFragment) fragmentManager.findFragmentById(R.id.fragment);
 
-        if (ParseServer.orders.size() > 0) {
-            onItemClicked(0);
-            orderNumber.setVisibility(View.VISIBLE);
-            tableNumber.setVisibility(View.VISIBLE);
-            orderItemsTextView.setVisibility(View.VISIBLE);
-            no_active_orders.setVisibility(View.INVISIBLE);
-        }
-
-        Timer timer = new Timer();
-        timer.schedule(new Ping(), 0, 30000);
-
+        orderDetails();
     }
 
     @Override
@@ -140,7 +128,7 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
         });
     }
 
-    public static void getRequestOrderObject(){
+    public void getRequestOrderObject(){
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Order");
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -158,6 +146,7 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
                         }
                         orderListFragment.updateOrderList();
                     }
+
                 } else {
                     Log.i("ERRRRRRRRR", "ERROR");
                     e.printStackTrace();
@@ -166,6 +155,17 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
         });
     }
 
+    public void orderDetails(){
+
+        if (ParseServer.orders.size() > 0) {
+            System.out.println(ParseServer.orders.size() + " <-- ORDER DETAIL");
+            onItemClicked(0);
+            orderNumber.setVisibility(View.VISIBLE);
+            tableNumber.setVisibility(View.VISIBLE);
+            orderItemsTextView.setVisibility(View.VISIBLE);
+            no_active_orders.setVisibility(View.INVISIBLE);
+        }
+    }
 
     public void buttonDisplay(String status){
 

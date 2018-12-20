@@ -2,31 +2,15 @@ package com.gbk.simoni.gbk;
 
 import android.app.Application;
 import android.util.Log;
-
 import com.parse.Parse;
 import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseObject;
-import com.parse.ParseUser;
-import com.parse.SaveCallback;
-import android.os.CountDownTimer;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import com.parse.FindCallback;
-import com.parse.ParseAnalytics;
-import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
+import java.util.Timer;
 
 public class ParseServer extends Application {
 
@@ -37,10 +21,9 @@ public class ParseServer extends Application {
         super.onCreate();
         ParseServerConfig();
         getRequest_OrderObject();
-    }
 
-    public interface getParseRequest{
-        void getOrderRequest();
+        Timer timer = new Timer();
+        timer.schedule(new Ping(), 0, 10000);
     }
 
     public void ParseServerConfig() {
@@ -62,7 +45,6 @@ public class ParseServer extends Application {
         ParseACL.setDefaultACL(defaultACL, true);
     }
 
-    // RUN THIS EVERY 30s --------------------------------------------------------------------
     public void getRequest_OrderObject() {
         orders = new ArrayList<>();
 
@@ -89,6 +71,5 @@ public class ParseServer extends Application {
                 }
             }
         });
-
     }
 }
