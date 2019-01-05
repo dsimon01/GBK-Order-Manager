@@ -1,6 +1,7 @@
 package com.gbk.simoni.gbk;
 
 
+import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -51,8 +52,44 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
 
         orderDetails();
 
-        Timer timer = new Timer();
-        timer.schedule(new Ping(), 0, 10000);
+        final Handler handler = new Handler();
+        final int delay = 5000; //milliseconds
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                ParseQuery<ParseObject> query = ParseQuery.getQuery("Order");
+                query.findInBackground(new FindCallback<ParseObject>() {
+                    @Override
+                    public void done(List<ParseObject> objects, ParseException e) {
+                        if (e == null) {
+                            if (objects.size() > 0) {
+                                for (ParseObject object : objects) {
+                                    ParseServer.orders.add(new Order(
+                                            object.getString("TableNumber"),
+                                            object.getString("Status"),
+                                            object.get("Item").toString(),
+                                            object.getInt("OrderID"),
+                                            object.getDouble("Price")
+                                    ));
+
+                                    orderDetails();
+                                }
+                                orderListFragment.updateOrderList();
+                            }
+
+                        } else {
+                            Log.i("ERRRRRRRRR", "ERROR");
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+                handler.postDelayed(this, delay);
+
+            }
+        }, delay);
     }
 
     @Override
@@ -133,30 +170,6 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
     }
 
     public void getRequestOrderObject(){
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Order");
-        query.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> objects, ParseException e) {
-                if (e == null) {
-                    if (objects.size() > 0) {
-                        for (ParseObject object : objects) {
-                            ParseServer.orders.add(new Order(
-                                    object.getString("TableNumber"),
-                                    object.getString("Status"),
-                                    object.get("Item").toString(),
-                                    object.getInt("OrderID"),
-                                    object.getDouble("Price")
-                            ));
-                        }
-                        orderListFragment.updateOrderList();
-                    }
-
-                } else {
-                    Log.i("ERRRRRRRRR", "ERROR");
-                    e.printStackTrace();
-                }
-            }
-        });
     }
 
     public void orderDetails(){
