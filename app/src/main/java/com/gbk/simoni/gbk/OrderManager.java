@@ -66,14 +66,15 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
                         if (e == null) {
                             if (objects.size() > 0) {
                                 for (ParseObject object : objects) {
-                                    ParseServer.orders.add(new Order(
-                                            object.getString("TableNumber"),
-                                            object.getString("Status"),
-                                            object.get("Item").toString(),
-                                            object.getInt("OrderID"),
-                                            object.getDouble("Price")
-                                    ));
-
+                                    if (object.getString("Status").equals("new") && objects.size() != ParseServer.orders.size()) {
+                                        ParseServer.orders.add(new Order(
+                                                object.getString("TableNumber"),
+                                                object.getString("Status"),
+                                                object.get("Item").toString(),
+                                                object.getInt("OrderID"),
+                                                object.getDouble("Price")
+                                        ));
+                                    }
                                     orderDetails();
                                 }
                                 orderListFragment.updateOrderList();
@@ -170,6 +171,30 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
     }
 
     public void getRequestOrderObject(){
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Order");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if (e == null) {
+                    if (objects.size() > 0) {
+                        for (ParseObject object : objects) {
+                                ParseServer.orders.add(new Order(
+                                        object.getString("TableNumber"),
+                                        object.getString("Status"),
+                                        object.get("Item").toString(),
+                                        object.getInt("OrderID"),
+                                        object.getDouble("Price")
+                                ));
+                        }
+                        orderListFragment.updateOrderList();
+                    }
+
+                } else {
+                    Log.i("ERRRRRRRRR", "ERROR");
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     public void orderDetails(){
