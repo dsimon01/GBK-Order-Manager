@@ -171,6 +171,7 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
     }
 
     public void getRequestOrderObject(){
+        ParseServer.orders.clear();
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Order");
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -185,8 +186,8 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
                                         object.getInt("OrderID"),
                                         object.getDouble("Price")
                                 ));
+                            orderListFragment.updateOrderList();
                         }
-                        orderListFragment.updateOrderList();
                     }
 
                 } else {
