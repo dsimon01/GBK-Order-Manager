@@ -56,6 +56,9 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
     @Override
     public void onItemClicked(int which) {
 
+        orderNumber.setVisibility(View.VISIBLE);
+        tableNumber.setVisibility(View.VISIBLE);
+        orderItemsTextView.setVisibility(View.VISIBLE);
         orderStatus = ParseServer.orders.get(which).getStatus();
         buttonDisplay(orderStatus);
         orderSelected = ParseServer.orders.get(which).getOrderID();
@@ -191,10 +194,11 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
     public void fetchOrderStatusUpdates(){
 
         final Handler handler = new Handler();
-        final int delay = 2000;
+        final int delay = 15000;
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                System.out.println("RUNNING GET REQUEST");
                 ParseServer.orders.clear();
                 ParseQuery<ParseObject> query = ParseQuery.getQuery("Order");
                 query.findInBackground(new FindCallback<ParseObject>() {
@@ -210,7 +214,7 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
                                             object.getInt("OrderID"),
                                             object.getDouble("Price")
                                     ));
-                                    orderDetails();
+                                    no_active_orders.setVisibility(View.INVISIBLE);
                                     orderListFragment.updateOrderList();
                                 }
                             }else {
