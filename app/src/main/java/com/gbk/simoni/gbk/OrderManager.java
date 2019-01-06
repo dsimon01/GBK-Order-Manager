@@ -114,6 +114,7 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
     }
     public void updateRecycler(ArrayList<String> items) {
         recyclerView = OrderInformationFragment.view.findViewById(R.id.recycler_view_order_info);
+        recyclerView.setVisibility(View.VISIBLE);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
