@@ -198,6 +198,7 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
                         orderNumber.setVisibility(View.INVISIBLE);
                         tableNumber.setVisibility(View.INVISIBLE);
                         orderItemsTextView.setVisibility(View.INVISIBLE);
+                        recyclerView = findViewById(R.id.recycler_view_order_info);
                         recyclerView.setVisibility(View.INVISIBLE);
                     }
 
