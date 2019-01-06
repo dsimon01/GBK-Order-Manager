@@ -1,6 +1,8 @@
 package com.gbk.simoni.gbk;
 
 
+import android.app.ProgressDialog;
+import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,8 +20,6 @@ import com.parse.ParseQuery;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Timer;
-
 
 public class OrderManager extends AppCompatActivity implements OrderListAdapter.ItemClicked {
 
@@ -34,7 +34,7 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
     RecyclerView.LayoutManager layoutManager;
     static OrderListFragment orderListFragment;
     FragmentManager fragmentManager;
-
+    ProgressDialog dialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,9 +50,7 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
         orderListFragment = (OrderListFragment) fragmentManager.findFragmentById(R.id.fragment);
 
         orderDetails();
-
-        Timer timer = new Timer();
-        timer.schedule(new Ping(), 0, 10000);
+        fetchOrderStatusUpdates();
     }
 
     @Override
@@ -67,21 +65,30 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
         orderItems = converter(items);
         updateRecycler(orderItems);
     }
+
     public ArrayList<String> converter(String string) {
         String convert = string;
         convert = convert.substring(1, convert.length() - 1);
         ArrayList<String> order_items = new ArrayList(Arrays.asList(convert.split(",")));
         return order_items;
     }
+
     public void updateRecycler(ArrayList<String> items) {
         recyclerView = OrderInformationFragment.view.findViewById(R.id.recycler_view_order_info);
+        recyclerView.setVisibility(View.VISIBLE);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         adapter = new ItemListAdapter(this, items);
         recyclerView.setAdapter(adapter);
     }
+
     public void onAcknowledgedOrder(View view) {
+
+        dialog = new ProgressDialog(OrderManager.this);
+        dialog.setTitle("Accepting Order");
+        dialog.setMessage("Please wait...");
+        dialog.show();
 
         ParseServer.orders.clear();
         ParseQuery<ParseObject> updateOrderStatus = ParseQuery.getQuery("Order");
@@ -93,7 +100,6 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
                     for (ParseObject object : objects) {
                         object.put("Status", "accepted");
                         object.saveInBackground();
-                        getRequestOrderObject();
                     }
                     acknowledged.setVisibility(View.INVISIBLE);
                     markedReady.setVisibility(View.VISIBLE);
@@ -103,12 +109,25 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
                 }
             }
         });
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                dialog.cancel();
+            }
+        }, 3000);
     }
     public void onMarkedOrderReady(View view){
 
+        dialog = new ProgressDialog(OrderManager.this);
+        dialog.setTitle("Marking Order as Ready");
+        dialog.setMessage("Please wait...");
+        dialog.show();
+
         ParseServer.orders.clear();
         System.out.println(ParseServer.orders.size() + " <-- CLEAR");
-
         ParseQuery<ParseObject> updateOrderStatus = ParseQuery.getQuery("Order");
         updateOrderStatus.whereEqualTo("OrderID", Integer.parseInt(orderSelected));
         updateOrderStatus.findInBackground(new FindCallback<ParseObject>() {
@@ -118,8 +137,6 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
                     for (ParseObject object : objects){
                         object.put("Status", "ready");
                         object.saveInBackground();
-                        getRequestOrderObject();
-
                         Toast.makeText(OrderManager.this, "Order Marked as ready", Toast.LENGTH_LONG).show();
                         acknowledged.setVisibility(View.INVISIBLE);
                         markedReady.setVisibility(View.INVISIBLE);
@@ -130,33 +147,15 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
                 }
             }
         });
-    }
 
-    public void getRequestOrderObject(){
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Order");
-        query.findInBackground(new FindCallback<ParseObject>() {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
             @Override
-            public void done(List<ParseObject> objects, ParseException e) {
-                if (e == null) {
-                    if (objects.size() > 0) {
-                        for (ParseObject object : objects) {
-                            ParseServer.orders.add(new Order(
-                                    object.getString("TableNumber"),
-                                    object.getString("Status"),
-                                    object.get("Item").toString(),
-                                    object.getInt("OrderID"),
-                                    object.getDouble("Price")
-                            ));
-                        }
-                        orderListFragment.updateOrderList();
-                    }
+            public void run() {
 
-                } else {
-                    Log.i("ERRRRRRRRR", "ERROR");
-                    e.printStackTrace();
-                }
+                dialog.cancel();
             }
-        });
+        }, 3000);
     }
 
     public void orderDetails(){
@@ -187,5 +186,61 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
             acknowledged.setVisibility(View.INVISIBLE);
             markedReady.setVisibility(View.INVISIBLE);
         }
+    }
+
+    public void fetchOrderStatusUpdates(){
+
+        final Handler handler = new Handler();
+        final int delay = 2000;
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ParseServer.orders.clear();
+                ParseQuery<ParseObject> query = ParseQuery.getQuery("Order");
+                query.findInBackground(new FindCallback<ParseObject>() {
+                    @Override
+                    public void done(List<ParseObject> objects, ParseException e) {
+                        if (e == null) {
+                            if (objects.size() > 0) {
+                                for (ParseObject object : objects) {
+                                    ParseServer.orders.add(new Order(
+                                            object.getString("TableNumber"),
+                                            object.getString("Status"),
+                                            object.get("Item").toString(),
+                                            object.getInt("OrderID"),
+                                            object.getDouble("Price")
+                                    ));
+                                    orderDetails();
+                                    orderListFragment.updateOrderList();
+                                }
+                            }else {
+                                ParseServer.orders.clear();
+                                orderListFragment.updateOrderList();
+                                no_active_orders.setVisibility(View.VISIBLE);
+                                orderNumber.setVisibility(View.INVISIBLE);
+                                tableNumber.setVisibility(View.INVISIBLE);
+                                orderItemsTextView.setVisibility(View.INVISIBLE);
+                                recyclerView = findViewById(R.id.recycler_view_order_info);
+                                recyclerView.setVisibility(View.INVISIBLE);
+                                markedReady.setVisibility(View.INVISIBLE);
+                            }
+
+                        } else {
+                            Log.i("ERRRRRRRRR", "ERROR");
+                            e.printStackTrace();
+                        }
+
+                    }
+                });
+
+                handler.postDelayed(this, delay);
+            }
+        }, delay);
+    }
+
+    @Override
+    public void onBackPressed() {
+        // super.onBackPressed(); commented this line in order to disable back press
+        Toast.makeText(getApplicationContext(), "Back press disabled!", Toast.LENGTH_SHORT).show();
     }
 }
