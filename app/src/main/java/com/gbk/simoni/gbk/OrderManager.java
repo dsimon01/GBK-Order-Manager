@@ -239,4 +239,10 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
             markedReady.setVisibility(View.INVISIBLE);
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        // super.onBackPressed(); commented this line in order to disable back press
+        Toast.makeText(getApplicationContext(), "Back press disabled!", Toast.LENGTH_SHORT).show();
+    }
 }
