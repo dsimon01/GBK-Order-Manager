@@ -39,7 +39,6 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
-
         orderNumber = findViewById(R.id.order_number_information_fragment);
         tableNumber = findViewById(R.id.table_number_information_fragment);
         acknowledged = findViewById(R.id.acknowledgeOrderButton);
@@ -55,7 +54,6 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
 
     @Override
     public void onItemClicked(int which) {
-
         orderNumber.setVisibility(View.VISIBLE);
         tableNumber.setVisibility(View.VISIBLE);
         orderItemsTextView.setVisibility(View.VISIBLE);
@@ -94,6 +92,7 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
         dialog.show();
 
         ParseServer.orders.clear();
+        System.out.println("Cleared orders");
         ParseQuery<ParseObject> updateOrderStatus = ParseQuery.getQuery("Order");
         updateOrderStatus.whereEqualTo("OrderID",  Integer.parseInt(orderSelected));
         updateOrderStatus.findInBackground(new FindCallback<ParseObject>() {
@@ -103,6 +102,9 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
                     for (ParseObject object : objects) {
                         object.put("Status", "accepted");
                         object.saveInBackground();
+                        System.out.println("Requested update status");
+                        Toast.makeText(OrderManager.this, "Order Accepted", Toast.LENGTH_LONG);
+                        updateStatus();
                     }
                     acknowledged.setVisibility(View.INVISIBLE);
                     markedReady.setVisibility(View.VISIBLE);
@@ -120,7 +122,7 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
 
                 dialog.cancel();
             }
-        }, 3000);
+        }, 2000);
     }
     public void onMarkedOrderReady(View view){
 
@@ -131,7 +133,7 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
 
         ParseServer.orders.clear();
         System.out.println(ParseServer.orders.size() + " <-- CLEAR");
-        ParseQuery<ParseObject> updateOrderStatus = ParseQuery.getQuery("Order");
+        final ParseQuery<ParseObject> updateOrderStatus = ParseQuery.getQuery("Order");
         updateOrderStatus.whereEqualTo("OrderID", Integer.parseInt(orderSelected));
         updateOrderStatus.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -141,9 +143,10 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
                         object.put("Status", "ready");
                         object.saveInBackground();
                         Toast.makeText(OrderManager.this, "Order Marked as ready", Toast.LENGTH_LONG).show();
-                        acknowledged.setVisibility(View.INVISIBLE);
-                        markedReady.setVisibility(View.INVISIBLE);
+                        updateStatus();
                     }
+                    acknowledged.setVisibility(View.INVISIBLE);
+                    markedReady.setVisibility(View.INVISIBLE);
                 }else {
                     Log.i("ERROR", "ERROR");
                     e.printStackTrace();
@@ -158,7 +161,7 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
 
                 dialog.cancel();
             }
-        }, 3000);
+        }, 2000);
     }
 
     public void orderDetails(){
@@ -194,7 +197,7 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
     public void fetchOrderStatusUpdates(){
 
         final Handler handler = new Handler();
-        final int delay = 15000;
+        final int delay = 30000;
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -240,6 +243,35 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
                 handler.postDelayed(this, delay);
             }
         }, delay);
+    }
+
+    public void updateStatus(){
+        System.out.println("Running updateStatus call ");
+        ParseServer.orders.clear();
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Order");
+        query.findInBackground(new FindCallback<ParseObject>() {
+
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if (e == null) {
+                    if (objects.size() > 0) {
+                        for (ParseObject object : objects) {
+                            ParseServer.orders.add(new Order(
+                                    object.getString("TableNumber"),
+                                    object.getString("Status"),
+                                    object.get("Item").toString(),
+                                    object.getInt("OrderID"),
+                                    object.getDouble("Price")
+                            ));
+                        }
+                        orderListFragment.updateOrderList();
+                    }
+                } else {
+                    Log.i("ERRRRRRRRR", "ERROR");
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     @Override
