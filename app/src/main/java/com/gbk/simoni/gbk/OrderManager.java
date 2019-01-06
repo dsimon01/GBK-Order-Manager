@@ -79,6 +79,7 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
                                 }
                                 orderListFragment.updateOrderList();
                             }
+                            getRequestOrderObject();
 
                         } else {
                             Log.i("ERRRRRRRRR", "ERROR");
@@ -186,8 +187,17 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
                                         object.getInt("OrderID"),
                                         object.getDouble("Price")
                                 ));
+
                             orderListFragment.updateOrderList();
                         }
+                    }else {
+                        ParseServer.orders.clear();
+                        orderListFragment.updateOrderList();
+                        no_active_orders.setVisibility(View.VISIBLE);
+                        orderNumber.setVisibility(View.INVISIBLE);
+                        tableNumber.setVisibility(View.INVISIBLE);
+                        orderItemsTextView.setVisibility(View.INVISIBLE);
+                        recyclerView.setVisibility(View.INVISIBLE);
                     }
 
                 } else {
