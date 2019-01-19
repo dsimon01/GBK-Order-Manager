@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="200dp"
         android:gravity="center"
-        android:text="No Active Orders"
+        android:text="@string/no_active_orders"
         android:textAllCaps="true"
         android:textColor="@android:color/holo_orange_light"
         android:textSize="18sp"

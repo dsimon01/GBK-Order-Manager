@@ -2,10 +2,8 @@ package com.gbk.simoni.gbk;
 
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,9 +21,9 @@ public class OrderInformationFragment extends Fragment {
         // Required empty public constructor
     }
 
-
+    // Loads one part of the Screen with the Resource file order Information Fragment.
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.order_information_fragment, container, false);
         return view;

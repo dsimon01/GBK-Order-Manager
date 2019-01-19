@@ -3,7 +3,6 @@ package com.gbk.simoni.gbk;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,20 +10,24 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+// Adapter class that populates the Order list fragment.
 public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.ViewHolder> {
 
-    ArrayList<Order> order;
-    ItemClicked activity;
+    private ArrayList<Order> order;
+    private ItemClicked activity;
 
+    // Interface implementation to retrieve which items in the recycler view are selected.
     public interface ItemClicked{
         void onItemClicked(int which);
     }
 
+    // Constructor of class which expects context and array list as parameters
     public OrderListAdapter (Context context, ArrayList<Order> list){
         order = list;
         activity = (ItemClicked) context;
     }
 
+    // inner View holder class handles the content display and retrieves item clicked.
     public class ViewHolder extends RecyclerView.ViewHolder{
         TextView order_number;
         TextView order_status;
@@ -41,6 +44,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.View
         }
     }
 
+    // Method that inflates from Resources file the design.
     @NonNull
     @Override
     public OrderListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {

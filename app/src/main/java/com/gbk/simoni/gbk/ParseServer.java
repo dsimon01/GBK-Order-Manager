@@ -10,7 +10,6 @@ import com.parse.FindCallback;
 import com.parse.ParseQuery;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
 
 public class ParseServer extends Application {
 
@@ -23,9 +22,9 @@ public class ParseServer extends Application {
         getRequest_OrderObject();
     }
 
-    public void ParseServerConfig() {
+    private void ParseServerConfig() {
 
-        // Enable Local Datastore.
+        // Enable Local Data store.
         Parse.enableLocalDatastore(this);
 
         // Config keys with Parse-Bitnami.
@@ -42,7 +41,11 @@ public class ParseServer extends Application {
         ParseACL.setDefaultACL(defaultACL, true);
     }
 
-    public void getRequest_OrderObject() {
+    /*
+    Before any other activity loads, this Method sends a GET request to the database for
+    any potential orders so it can be displayed immediately after login.
+    */
+    private void getRequest_OrderObject() {
         orders = new ArrayList<>();
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Order");
@@ -63,7 +66,7 @@ public class ParseServer extends Application {
                         }
                     }
                 } else {
-                    Log.i("ERRRRRRRRR", "ERROR");
+                    Log.i("ERROR", "ERROR");
                     e.printStackTrace();
                 }
             }

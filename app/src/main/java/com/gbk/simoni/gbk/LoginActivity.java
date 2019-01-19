@@ -14,11 +14,22 @@ import com.parse.ParseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
-    public void onLoginClicked(View view){
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
+    }
 
+    /*
+    Method that handles user authentication when the user chooses to login.
+    If the input is empty or does not match any stored data in the database
+    the login will fail, otherwise the user can login successfully.
+    Upon successful login, the user will be directed to the OrderManager Activity.
+     */
+
+    public void onLoginClicked(View view){
         EditText username = findViewById(R.id.usernameEditText);
         EditText password = findViewById(R.id.passwordEditText);
-
         if (username.getText().toString().matches("") || password.getText().toString()
                 .matches("")){
             Toast.makeText(this, "Username/Password required.",
@@ -40,15 +51,9 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-    }
-
+    // Disables back button in this activity.
     @Override
     public void onBackPressed() {
         // super.onBackPressed(); commented this line in order to disable back press
-        Toast.makeText(getApplicationContext(), "Back press disabled!", Toast.LENGTH_SHORT).show();
     }
 }

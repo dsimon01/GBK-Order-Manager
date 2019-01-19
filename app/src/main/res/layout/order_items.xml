@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:text="x3 Burger and Fries"
+            android:text="@string/x3_burger_and_fries"
             android:textAllCaps="true"
             android:textColor="@color/colorPrimaryLight"
             android:textSize="18sp"

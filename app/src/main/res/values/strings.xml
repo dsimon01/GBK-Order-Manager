@@ -9,4 +9,16 @@
     <string name="order_number">Order Number</string>
     <string name="count_of_items">Count of items</string>
     <string name="table_number">Table number 18</string>
+    <string name="desc">desc</string>
+    <string name="login">Login</string>
+    <string name="username">Username:</string>
+    <string name="password">Password:</string>
+    <string name="main_activity">Main Activity</string>
+    <string name="status">STATUS</string>
+    <string name="order_total">Order Total</string>
+    <string name="order_items">ORDER ITEMS:</string>
+    <string name="acknowledge_order">ACKNOWLEDGE ORDER</string>
+    <string name="mark_order_as_ready">MARK ORDER AS READY</string>
+    <string name="x3_burger_and_fries">x3 Burger and Fries</string>
+    <string name="no_active_orders">No Active Orders</string>
 </resources>
