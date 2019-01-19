@@ -54,7 +54,6 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.View
         return new ViewHolder(view);
     }
 
-    // Method that handles the content display based on the data retrieved from the database.
     @Override
     public void onBindViewHolder(@NonNull OrderListAdapter.ViewHolder viewHolder, int i) {
         viewHolder.itemView.setTag(order.get(i));
