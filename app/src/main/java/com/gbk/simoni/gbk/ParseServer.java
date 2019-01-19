@@ -11,7 +11,6 @@ import com.parse.ParseQuery;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class ParseServer extends Application {
 
     public static ArrayList<Order> orders;

@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -28,7 +27,6 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
     private TextView orderNumber, tableNumber, no_active_orders, orderItemsTextView;
     private Button acknowledged, markedReady;
     private String orderSelected;
-
     private RecyclerView recyclerView;
     private OrderListFragment orderListFragment;
     private ProgressDialog dialog;
@@ -41,6 +39,7 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
         // Declares variables with Views from Resource file.
         findViews();
 
+        // Declarations to access method updateOrderList in OrderListFragment from this class.
         FragmentManager fragmentManager = this.getSupportFragmentManager();
         orderListFragment = (OrderListFragment) fragmentManager.findFragmentById(R.id.fragment);
 
@@ -74,9 +73,10 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
     }
 
     /*
-    This Class implements OrderListAdapter.ItemClicked so it can access the item clicked.
-    Arranges view visibility as appropriate.
+    This Class implements OrderListAdapter.ItemClicked so it can define the item clicked method.
+    Arranges view visibility as appropriate and based on the item clicked.
      */
+
     @Override
     public void onItemClicked(int which) {
         orderNumber.setVisibility(View.VISIBLE);
@@ -88,10 +88,11 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
         orderNumber.setText("#" + orderSelected);
         tableNumber.setText(ParseServer.orders.get(which).getTableNumber().toUpperCase());
         String items = ParseServer.orders.get(which).getItems();
-        ArrayList<String> orderItems = trim(items);
+        ArrayList<String> orderItems = convertStringToArrayList(items);
         updateRecycler(orderItems);
     }
 
+    // Arranges button display based on order status.
     private void buttonDisplay(String status) {
 
         if (status.equals("new")) {
@@ -110,13 +111,18 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
         }
     }
 
-    private ArrayList<String> trim(String string) {
+    /*
+    Trims first and last character of a string, then creates an arrayList from the items within
+    this string that are separated by a comma.
+    */
+    private ArrayList<String> convertStringToArrayList(String string) {
         String trim = string;
         trim = trim.substring(1, trim.length() - 1);
         ArrayList<String> order_items = new ArrayList(Arrays.asList(trim.split(",")));
         return order_items;
     }
 
+    // Populates the recycler view with an array list of items.
     private void updateRecycler(ArrayList<String> items) {
         recyclerView = OrderInformationFragment.view.findViewById(R.id.recycler_view_order_info);
         recyclerView.setVisibility(View.VISIBLE);
@@ -130,38 +136,17 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
     /*
     When the user taps to accept the order this method is executed.
     Creates a progress dialog for 2"
-    Clears all existing elements of the Orders List.
-    Runs a PUT query by checking the order number and updates the status of an order to accepted.
-    Calls internally a method to force a GET request which will display the Order item with new
-    status, new orders could be fetched too.
+    Calls method to update status in database.
+    Changes button visibility.
      */
     public void onAcknowledgedOrder(View view) {
 
-        dialog = new ProgressDialog(OrderManager.this);
-        dialog.setTitle("Accepting Order");
-        dialog.setMessage("Please wait...");
+        setDialog("Accepting Order", "Updating Order...");
         dialog.show();
 
-        ParseServer.orders.clear();
-        ParseQuery<ParseObject> updateOrderStatus = ParseQuery.getQuery("Order");
-        updateOrderStatus.whereEqualTo("OrderID", Integer.parseInt(orderSelected));
-        updateOrderStatus.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> objects, ParseException e) {
-                if (e == null && objects != null) {
-                    for (ParseObject object : objects) {
-                        object.put("Status", "accepted");
-                        object.saveInBackground();
-                        updateStatus();
-                    }
-                    acknowledged.setVisibility(View.INVISIBLE);
-                    markedReady.setVisibility(View.VISIBLE);
-                } else {
-                    Log.i("ERROR", "ERROR");
-                    e.printStackTrace();
-                }
-            }
-        });
+        updateOrderStatusInDatabase("accepted");
+        acknowledged.setVisibility(View.INVISIBLE);
+        markedReady.setVisibility(View.VISIBLE);
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -176,40 +161,18 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
     /*
     When the user taps to mark the order as ready this method is executed.
     Creates a progress dialog for 2"
-    Clears all existing elements of the Orders List.
-    Runs a PUT query by checking the order number and updates the status of an order to accepted.
-    Calls internally a method to force a GET request which will display the Order item with new
-    status, new orders could be fetched too.
+    Calls method to update status in database.
+    Changes button visibility.
      */
 
     public void onMarkedOrderReady(View view) {
 
-        dialog = new ProgressDialog(OrderManager.this);
-        dialog.setTitle("Marking Order as Ready");
-        dialog.setMessage("Please wait...");
+        setDialog("Marking Order as Ready", "Please wait...");
         dialog.show();
 
-        ParseServer.orders.clear();
-        System.out.println(ParseServer.orders.size() + " <-- CLEAR");
-        final ParseQuery<ParseObject> updateOrderStatus = ParseQuery.getQuery("Order");
-        updateOrderStatus.whereEqualTo("OrderID", Integer.parseInt(orderSelected));
-        updateOrderStatus.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> objects, ParseException e) {
-                if (e == null && objects != null) {
-                    for (ParseObject object : objects) {
-                        object.put("Status", "ready");
-                        object.saveInBackground();
-                        updateStatus();
-                    }
-                    acknowledged.setVisibility(View.INVISIBLE);
-                    markedReady.setVisibility(View.INVISIBLE);
-                } else {
-                    Log.i("ERROR", "ERROR");
-                    e.printStackTrace();
-                }
-            }
-        });
+        updateOrderStatusInDatabase("ready");
+        acknowledged.setVisibility(View.INVISIBLE);
+        markedReady.setVisibility(View.INVISIBLE);
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -221,11 +184,74 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
         }, 2000);
     }
 
+    // Expects String parameters that will be used to populate the title and message of the dialog.
+    private void setDialog(String title, String msg) {
+
+        dialog = new ProgressDialog(OrderManager.this);
+        dialog.setTitle(title);
+        dialog.setMessage(msg);
+    }
+
+    /*
+    Method that is called when the user taps on accept or ready an order.
+    Runs a query by looking for the Order object where the order number matches the current one.
+    updates the status based on the String parameter passed in the method call with a PUT request.
+    Calls updateStatus method to update the recycler view with the updated status.
+     */
+    private void updateOrderStatusInDatabase(final String status) {
+
+        ParseQuery<ParseObject> updateOrderStatus = ParseQuery.getQuery("Order");
+        updateOrderStatus.whereEqualTo("OrderID", Integer.parseInt(orderSelected));
+        updateOrderStatus.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if (e == null && objects != null) {
+                    for (ParseObject object : objects) {
+                        object.put("Status", status);
+                        object.saveInBackground();
+                        updateStatus();
+                    }
+                } else {
+                    Log.i("ERROR", "ERROR");
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    // GET request to the database. Updates the Recycler view.
+    private void updateStatus() {
+        ParseServer.orders.clear();
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Order");
+        query.findInBackground(new FindCallback<ParseObject>() {
+
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if (e == null) {
+                    if (objects.size() > 0) {
+                        for (ParseObject object : objects) {
+                            ParseServer.orders.add(new Order(
+                                    object.getString("TableNumber"),
+                                    object.getString("Status"),
+                                    object.get("Item").toString(),
+                                    object.getInt("OrderID"),
+                                    object.getDouble("Price")
+                            ));
+                        }
+                        orderListFragment.updateOrderList();
+                    }
+                } else {
+                    Log.i("ERROR", "ERROR");
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
     /*
     Scheduled GET request to the database every 30" using a Handler.
     Clears all existing items within the Orders List
     Populates it again with the updates, if any. otherwise sets the UI in no active orders mode.
-
      */
     private void fetchOrderStatusUpdates() {
 
@@ -270,7 +296,7 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
     }
 
     // Updates the UI to show the no active orders design.
-    private void setNoActiveOrdersDisplay(){
+    private void setNoActiveOrdersDisplay() {
         ParseServer.orders.clear();
         orderListFragment.updateOrderList();
         no_active_orders.setVisibility(View.VISIBLE);
@@ -280,35 +306,6 @@ public class OrderManager extends AppCompatActivity implements OrderListAdapter.
         recyclerView = findViewById(R.id.recycler_view_order_info);
         recyclerView.setVisibility(View.INVISIBLE);
         markedReady.setVisibility(View.INVISIBLE);
-    }
-
-    // Forced GET request to the database. Updates the Recycler view.
-    private void updateStatus() {
-        ParseServer.orders.clear();
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Order");
-        query.findInBackground(new FindCallback<ParseObject>() {
-
-            @Override
-            public void done(List<ParseObject> objects, ParseException e) {
-                if (e == null) {
-                    if (objects.size() > 0) {
-                        for (ParseObject object : objects) {
-                            ParseServer.orders.add(new Order(
-                                    object.getString("TableNumber"),
-                                    object.getString("Status"),
-                                    object.get("Item").toString(),
-                                    object.getInt("OrderID"),
-                                    object.getDouble("Price")
-                            ));
-                        }
-                        orderListFragment.updateOrderList();
-                    }
-                } else {
-                    Log.i("ERROR", "ERROR");
-                    e.printStackTrace();
-                }
-            }
-        });
     }
 
     // Disables back button.
