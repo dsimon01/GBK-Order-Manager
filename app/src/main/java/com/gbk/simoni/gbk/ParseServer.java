@@ -31,7 +31,7 @@ public class ParseServer extends Application {
         Parse.initialize(new Parse.Configuration.Builder(getApplicationContext())
                 .applicationId("a150e5d0e42666ddf6864edf392bed450d9bb305")
                 .clientKey("ec3b36f8e6eea59e2a7d52b4358efaf7594aaca8")
-                .server("http://3.8.131.250:80/parse/")
+                .server("http://35.178.251.100:80/parse/")
                 .build()
         );
 
